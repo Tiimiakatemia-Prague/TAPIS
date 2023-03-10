@@ -1,0 +1,152 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CzuEseje.Areas.Identity.Data;
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Uživatelé";
+    Layout = "~/Views/Shared/_LayoutLogin2.cshtml";
+}
+
+
+<div class="container-fluid px-4">
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="row d-flex flex-column px-0 mx-0">
+            <div class="pb-3 col-5 px-0 mx-0">
+                <h4 class="pb-2">Hledat uživatele</h4>
+                <div style="margin-bottom:15px;">
+                    <input type="text" placeholder="Hledat.." name="search" id="searchInput"
+                           class="w-100">
+                </div>
+            </div>
+            <div class="admin-add d-flex">
+                <a asp-action="Register" asp-controller="AUcet" class="btn-primary m-auto d-block">Přidat uživatele</a>
+            </div>
+        </div>
+    }
+    <div class="pb-3">
+        <h4 class="pb-2">Filtrovat uživatele</h4>
+        <div class="d-flex flex-row">
+            <div class="pr-3 border-right">
+                <buttton class="link-default" onclick="showRole('vse')">Vše</buttton>
+            </div>
+            <div class="px-3 border-right">
+                <buttton class="link-default" onclick="showRole('Admin')">Admin</buttton>
+            </div>
+            <div class="px-3 border-right">
+                <buttton class="link-default" onclick="showRole('Vedení')">Student</buttton>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <div class="d-flex row align-items-stretch justify-content-start">
+            @foreach (ApplicationUser user in Model.ToList())
+            {
+                IList<string> role = await UserManager.GetRolesAsync(user);
+                <div class="col-md-6 col-xl-5 my-3 userCard" data-role=""
+                     data-id="@user.FirstName @user.LastName @user.Email ">
+                    <div class="card">
+                        <div class="card-header" style="color:black;">
+                            <b>ID uživatele:</b> @user.Id
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">@user.FirstName @user.LastName</h5>
+                            <h6 style="font-family: 'Roboto', sans-serif; font-weight: 400!important;" class="card-title mb-3">@user.UserName</h6>
+                            <p><b class="p">Role uživatele:</b></p>
+                        </div>
+                        <div class="card-footer justify-content">
+                            <a asp-action="EditUser" asp-controller="Admin" asp-route-id="@user.Id" class="btn btn-outline-dark   text-left">Upravit</a>
+                            @if (user.EmailConfirmed != true)
+                            {
+                                <a asp-action="ConfEmail" asp-controller="Admin" asp-route-id="@user.Id" class="btn btn-outline-dark text-left mx-2">Potvrdit email</a>
+                            }
+                            
+                            <div style="display: inline-block;" class="px-1  float-end">
+                                <a  class="admin-news-delete d-block" onclick="deleteUser(this)" data-id="@user.Id">
+                                    <img src="~/images/icons/delete.svg" alt="" class="img-fluid">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    
+</div>
+
+<div>
+</div>
+
+<div class="confirmation-container-outer" style="display:none;">
+    <div class="confirmation-container-inner bg-secondary m-auto position-relative">
+        <div class="confirmation-close-container confirmation-close-trigger">
+            <img src="~/images/icons/close.svg" alt="Zavřít"
+                 class="img-fluid">
+        </div>
+        <div class="px-5 py-4 d-flex flex-column">
+            <div class="pt-4 pb-5">
+                <h5 class="h4 pt-2">Opravdu si přejete smazat tohoto uživatele?</h5>
+            </div>
+            <div class="d-flex row d-flex justify-content-around pb-4">
+                <div>
+                    <a asp-action="DeleteUser" asp-controller="Admin"
+                       class="btn-primary" id="deleteConfirmation">Ano</a>
+                </div>
+                <div>
+                    <buttton class="link-default confirmation-close-trigger">Ne</buttton>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+    function showRole(role){
+        console.log(role);
+        $( ".userCard" ).each(function() {
+            let $this = $(this)
+            let roleNazev = $this.attr("data-role");
+            if (roleNazev === role || role === "vse") {
+                $this.show();
+            } else {
+                $this.hide();
+            }
+        console.log(    );
+    });
+    }
+    let $deleteConfirmation = $("#deleteConfirmation");
+    let $href = $deleteConfirmation.attr("href");
+    function deleteUser(el) {
+        let id = $(el).attr("data-id");
+        $('.confirmation-container-outer').css('display', 'flex');
+        $deleteConfirmation.attr("href", $href + '/' + id);
+    }
+        
+    $('.confirmation-close-trigger').click(function (){
+        $('.confirmation-container-outer').css('display', 'none');
+        $deleteConfirmation.attr("href", $href);
+    })
+    
+    $( "#searchInput" ).keyup(function() {
+        var input = $("#searchInput").val().toLowerCase();
+        console.log(input)
+      $( ".userCard" ).each(function( i ) {
+        var attr = $(this).attr("data-id").toLowerCase();
+        var inputContain = attr.includes(input);  
+        if(inputContain){
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+        console.log(attr);
+        console.log(input);
+      });
+    });
+</script>
+}

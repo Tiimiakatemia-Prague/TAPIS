@@ -1,0 +1,179 @@
+﻿@model Esej
+@{
+    ViewData["Title"] = "Privacy Policy";
+    Layout = "~/Views/Shared/_LayoutLogin2.cshtml";
+    ViewData["Title"] = Model.Id!=0 ? "Upravit příspěvek" : "Vytvořit příspěvek";
+}
+
+<div class="container-fluid px-5">
+    <div class="py-3">
+        <h2 class="">@(Model.Id!=0 ? "Upravit" : "Vytvořit") příspěvek</h2>    
+    </div>
+    
+    <div>
+        <div class="row">
+            <div class="col-lg-6 col-xl-6">
+                <form asp-action="HandleEsejForm" enctype="multipart/form-data">
+                    @if (Model.Id != 0)
+                    {
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="User" />
+                    }
+                    <input type="hidden" asp-for="TextRaw" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label">Název</label>
+                        <input asp-for="Title" id="titleInput" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                     <div class="form-group">
+                        <label asp-for="Source" class="control-label">Zdroj</label>
+                        <select name="selSource" class="form-control">
+                            <option value="0">vyberte zdroj</option>
+                            @foreach (Source source in ViewBag.Sources)
+                            {
+                                if (Model.Source != null)
+                                {
+                                    if (source.Id == Model.Source.Id)
+                                    {
+                                        <option value="@source.Id" selected>@source.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@source.Id">@source.Name</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="@source.Id">@source.Name</option>
+                                }
+                
+                            }
+                        </select>
+                        <span asp-validation-for="Source" class="text-danger"></span>
+                    </div> 
+                    <div class="form-group" style="width:950px; min-height:500px;">
+                                    <label asp-for="Text" class="control-label">Text</label>
+                                    <textarea asp-for="Text" class="form-control" id="TextAreaPost" style="min-height:500px;"></textarea>
+                                    <span asp-validation-for="Text" class="text-danger"></span>
+                                </div>
+                    <div class="form-group">
+                        <input type="submit" value="Uložit" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    <script src="https://cdn.tiny.cloud/1/4yp4vlwqi2g6lrnq1ophsmkncjhh7t9zjzao9uk8lxtibtyd/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        $( document ).ready(function() {
+            
+        });
+
+        function example_image_upload_handler(blobInfo, success, failure, progress) {
+            var xhr, formData;
+
+            xhr = new XMLHttpRequest();
+            xhr.withCredentials = false;
+            xhr.open('POST', '/PostHandler/UploadImage');
+
+            xhr.upload.onprogress = function (e) {
+                progress(e.loaded / e.total * 100);
+            };
+
+            xhr.onload = function () {
+                var json;
+
+                if (xhr.status === 403) {
+                    failure('HTTP Error: ' + xhr.status, { remove: true });
+                    return;
+                }
+
+                if (xhr.status < 200 || xhr.status >= 300) {
+                    failure('HTTP ErrorT: ' + xhr.status);
+                    return;
+                }
+
+                json = JSON.parse(xhr.responseText);
+
+                if (!json || typeof json.location != 'string') {
+                    failure('Invalid JSON: ' + xhr.responseText);
+                    return;
+                }
+
+                success(json.location);
+            };
+
+            xhr.onerror = function () {
+                failure('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+            };
+
+            formData = new FormData();
+            formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+            xhr.send(formData);
+        };
+        function myCustomOnChangeHandler(myContent) {
+          $('#TextRaw').val(myContent);
+        }
+        tinymce.init({
+            selector: '#TextAreaPost',
+            branding: false,
+            menubar: 'insert',
+            language: 'cs',
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo  link image  formatselect ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent ' +
+                'removeformat | help',
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            images_upload_handler: example_image_upload_handler,
+            images_upload_base_path: '/../img',
+            image_caption: true,
+            init_instance_callback: function(editor) {
+                editor.on('keyup', function(e) {
+                  var myContent = tinymce.get("TextAreaPost").getContent({format : 'text'});
+                    myCustomOnChangeHandler(myContent)
+                });
+              }
+        });
+
+        var loadFile = function(event) { //trigged when files are uploaded
+            var i = 0;
+            Array.from(event.target.files).forEach(file => { 
+                var fileSrc = URL.createObjectURL(event.target.files[i]);
+                console.log("LOG1 "+event.target.files[i].name)
+                var dataId = event.target.files[i].name
+                console.log("LOG2 "+event.target.files[i])
+                $("#div-upload-image").html('<img class="col-6 mx-0 px-0 mb-4 admin-gallery-image" src="'+fileSrc+'" alt="Fotografie" data-id="'+dataId+'">')
+                i = i+1;
+            });
+            
+
+            // $('#galleryGrid img').each(function (){
+            //     $(this).setCellAbsolutePositionAndSize()
+            // })
+            
+            console.log("LOG3 "+event.target.files[0])
+            console.log("LOG4 "+JSON.stringify(event.target.files))
+            
+            
+            //$('#galleryGrid').gridstrap();
+            //output.src = URL.createObjectURL(event.target.files[0]);
+            //output.onload = function() {
+            //  URL.revokeObjectURL(output.src) // free memory
+            //}
+
+        };
+        
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CzuEseje</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/AdminCms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CzuEseje.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" style="background: linear-gradient(90deg,#304850,#96d5cb);">
+            @*<a asp-action="Index" asp-controller="Home">
+                <div class="sidebar-header" style="background: linear-gradient(90deg,#304850,#96d5cb);">
+                    <h3>Autoparáda</h3>
+                    <strong>AP</strong>
+                </div>
+            </a>*@
+            <div class="sidebar-header" style="text-align:center;background: linear-gradient(90deg,#304850,#96d5cb);">
+                <img src="~/img/tiiLogo.png" width="180" height="60"/>
+            </div>
+
+            <ul class="list-unstyled components" style="border-bottom:0px;">
+                <li>
+                    <a asp-action="Index" asp-controller="Ucet">
+                        <i class="fas fa-briefcase"></i>
+                        Domů
+                    </a>
+                    <a asp-action="Aktuality" asp-controller="Post">
+                        <i class="fas fa-briefcase"></i>
+                        Knihy
+                    </a>
+                    @*<a asp-action="Aktuality" asp-controller="Ucet">
+                        <i class="fas fa-briefcase"></i>
+                        Příspěvky
+                    </a>*@
+                    <a asp-action="MakePick" asp-controller="MakePick">
+                        <i class="fas fa-briefcase"></i>
+                        Eseje
+                    </a>
+                    <a asp-action="MakePick" asp-controller="MakePick">
+                        <i class="fas fa-briefcase"></i>
+                        Uživatelé
+                    </a>
+
+            </ul>
+            @if (User.IsInRole("Admin"))
+            {
+                <ul class="list-unstyled components">
+
+                    <li>
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle hoverlist" style="background-color:#2099d7;">
+                            <i class="fas fa-copy"></i>
+                            Uživatelé
+                        </a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a asp-action="Users" asp-controller="Admin" class="subLeftMargin">Seznam uživatelů</a>
+                            </li>
+                            <li>
+                                <a asp-action="Register" asp-controller="AUcet" class="subLeftMargin">Přidat uživatele</a>
+                            </li>
+                        </ul>
+                        <a href="#pageSubmenu2"  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle hoverlist" style="background-color:#2099d7;">
+                            <i class="fas fa-copy"></i>
+                            Možnosti správce
+                        </a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu2" >
+                            <li>
+                                <a asp-action="SeznamKategorii" asp-controller="Admin" class="subLeftMargin">Správa kategorii</a>
+                            </li>
+                            <li>
+                                <a asp-action="SeznamRoli" asp-controller="Admin" class="subLeftMargin">Správa rolí</a>
+                            </li>
+                            <li>
+                                <a asp-action="SeznamOrdinaci" asp-controller="Admin" class="subLeftMargin">Správa ordinací</a>
+                            </li>
+                            <li>
+                                <a asp-action="SeznamLekaru" asp-controller="Admin" class="subLeftMargin">Správa lékařů</a>
+                            </li>
+                            <li>
+                                <a asp-action="Obrazky" asp-controller="Admin" class="subLeftMargin">Správa obrázků</a>
+                            </li>
+                            <li>
+                                <a asp-action="Galerie" asp-controller="Admin" class="subLeftMargin">Správa galerii</a>
+                            </li>
+                            <li>
+                                <a asp-action="SeznamSpecializaci" asp-controller="Admin" class="subLeftMargin">Správa specializací</a>
+                            </li>
+                            <li>
+                                <a asp-action="Uzivatele" asp-controller="Admin" href="#" class="subLeftMargin">Uživatelé</a>
+                            </li>
+                            <li>
+                                <a href="#" class="subLeftMargin">Statistiky</a>
+                            </li>
+                            <li>
+                                <a href="#" class="subLeftMargin">Nastavení stránky</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            }
+            @*<partial name="_LoginPartialAdmin" />*@
+
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" style="padding:0px; padding-top:20px; padding-left:20px; color:black;">    
+
+            @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="">
+                <div class="container" style="margin-left:0px;">
+                    <button type="button" id="sidebarCollapse" class="btn btn-info" style="background: linear-gradient(90deg,#4f0d29,#e21d35);">
+                        <i class="fas fa-align-left"></i>
+                        <span style="color:white;">Skrýt</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <div>
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item hoverlist" style="color:white;">
+                                    <a style="color:white;" class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Domů</a>
+                                </li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Only Admin</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    
+                </div>
+            </nav>*@
+            @RenderBody()
+
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - CzuEseje - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

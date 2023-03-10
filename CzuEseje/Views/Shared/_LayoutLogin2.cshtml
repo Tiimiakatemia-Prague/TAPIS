@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CzuEseje</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+@*    <link rel="stylesheet" href="~/css/style4.css" asp-append-version="true" />
+*@    <link rel="stylesheet" href="~/css/AdminCms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CzuEseje.styles.css" asp-append-version="true" />
+    <script src="https://cdn.tiny.cloud/1/evhl586ng7u4kohxnogo7msiioskzm6ekydzdfglb9nk30zq/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <style>
+        p {
+            color:black;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" class="position-relative">
+            <a asp-action="Index" asp-controller="Home">
+                <div class="sidebar-header">
+                    <h3 style="color:white">Tiimiakatemia</h3>
+                    <img class="img-fluid sidebar-logo" src="~/img/tiiLogo.png" alt="DK logo">
+                </div>
+            </a>
+            
+
+            <ul class="list-unstyled components mb-0 py-1">
+                <li>
+                <li>
+                    <a asp-action="Index" asp-controller="Ucet"
+                       class="d-flex flex-row">
+                        <span class="col-2 p-0 d-flex link-icon">
+                            <img class="img-fluid m-auto" src="~/images/icons/home.svg" alt="Ikona">
+                        </span>
+                        <span class="col-10 p-0 link-text">
+                            Domů
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="Index" asp-controller="Esej"
+                       class="d-flex flex-row">
+                        <span class="col-2 p-0 d-flex link-icon">
+                            <img class="img-fluid m-auto" src="~/images/icons/home.svg" alt="Ikona">
+                        </span>
+                        <span class="col-10 p-0 link-text">
+                            Eseje
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="Knihy" asp-controller="Home"
+                       class="d-flex flex-row">
+                        <span class="col-2 p-0 d-flex link-icon">
+                            <img class="img-fluid m-auto" src="~/images/icons/home.svg" alt="Ikona">
+                        </span>
+                        <span class="col-10 p-0 link-text">
+                            Knihy a zdroje
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="Uzivatele" asp-controller="Home"
+                       class="d-flex flex-row">
+                        <span class="col-2 p-0 d-flex link-icon">
+                            <img class="img-fluid m-auto" src="~/images/icons/home.svg" alt="Ikona">
+                        </span>
+                        <span class="col-10 p-0 link-text">
+                            Uživatelé
+                        </span>
+                    </a>
+                </li>
+
+        </nav>
+
+            <!-- Page Content  -->
+            <div id="content" class="p-0">
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light  dropshadow-default mb-0 py-4"
+                     id="adminHeader">
+                    <div class="container-fluid px-3 d-flex flex-row justify-content-between">
+    
+    
+                        <div class="navbar-collapse collapse d-sm-inline-flex">
+    
+                            <div class="d-flex flex-row">
+                                <div class="pl-2 pr-3 d-flex">
+                                    @*<a class="m-auto admin-nav-back-arrow">
+                                      <img class="img-fluid icon-small" src="~/images/icons/back_arrow.svg" alt="Ikona">  
+                                    </a>*@
+                                </div>
+                                
+                                @*<button type="button" id="sidebarCollapse" class="btn btn-primary">
+                                    <span>Skrýt menu</span>
+                                </button>*@
+                                
+                                
+                                @*<div class="pl-3 d-flex">
+                                    <a class="link-default-blue m-auto" asp-area="" asp-controller="Home" asp-action="Index">Na hlavní stránku</a>
+                                </div>*@
+                            </div>
+    
+    
+                        </div>
+                        
+                        <div>
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </div>
+    
+                </nav>
+                
+                <div id="divRenderBody" class=" bg-white position-relative">
+                    @RenderBody()
+                </div>
+    
+            </div>
+    </div>
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - CzuEseje - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/js/admin.js" asp-append-version="true"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Source>
+@{
+    ViewData["Title"] = "Privacy Policy";
+        Layout = "~/Views/Shared/_LayoutLogin2.cshtml";
+}
+<style>
+    h2, h5, h6 {
+        color: black;
+    }
+        h2:hover {
+            color: #2B463D;
+        }
+
+</style>
+<div style="margin-left:20px;">
+
+
+    <div class="container">
+        <div class="row" style="margin-bottom:15px;">
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="panel col-md-10">
+                    <a asp-action="AddCategory" asp-controller="Category" class="btn btn-info btn-md float-right offset-2" style="margin:3px;">Nová kategorie</a>
+                </div>
+                <div class="panel col-md-2">
+                </div>
+            }
+        </div>
+
+        <div class="row">
+            @foreach (Source source in Model)
+            {
+                <div>
+
+                </div>
+            <div style="color:black; box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; margin-bottom:15px; padding:25px;" class="col-md-12">
+                <span style="padding-top:6px;">@source.Name</span>
+                <a asp-action="DeleteKategorie" asp-controller="Cms" asp-route-id="@source.Id" class="btn btn-danger float-right">Smazat</a>
+            </div>
+            }
+        </>
+    </div>
+
+</div>
